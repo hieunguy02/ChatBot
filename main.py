@@ -1,13 +1,20 @@
-import openai
+from openai import OpenAI
 
-openai.api_key = 'your-api-key-here'
+client = OpenAI(api_key='yourapikey')
 
-response = openai.ChatCompletion.create(
-  model="gpt-4",
+def get_response(message):
+  response = client.chat.completions.create(model="gpt-3.5-turbo",
   messages=[
         {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Hello, how can I create a bot?"},
+        message,
     ]
-)
 
-print(response.choices[0].message["content"])
+  )
+  return response
+
+question = input("Please say something")
+message = {"role": "user", "content": question }
+
+answer = get_response(message)
+
+print(answer.choices[0].message.content)
